@@ -30,20 +30,22 @@ module Configer
         path_elements= var.split(File::Separator)
         path_elements.delete('')
 
-        tmp_hsh= ConfigObject.new
+        tmp_hsh= {}
         current_obj= nil
 
-        path_elements.each { |key_str|
+        path_elements.count.times { |index|
 
+          key_str= path_elements[index]
           (current_obj ||= tmp_hsh)
-          current_obj[key_str]= ConfigObject.new
-          current_obj= current_obj[key_str]
+          current_obj[key_str]= {} #ConfigObject.new
+          current_obj= current_obj[key_str] unless index == (path_elements.count-1)
 
         }
 
-        current_obj= YAML.safe_load File.read file_path
+        current_obj[ path_elements.last ]= YAML.safe_load File.read file_path
         Data.config_hash.deep_merge!(tmp_hsh)
 
+        return nil
       end
 
     end
@@ -71,21 +73,22 @@ module Configer
         path_elements= var.split(File::Separator)
         path_elements.delete('')
 
-        tmp_hsh= ConfigObject.new
+        tmp_hsh= {}
         current_obj= nil
 
-        path_elements.each { |key_str|
+        path_elements.count.times { |index|
 
+          key_str= path_elements[index]
           (current_obj ||= tmp_hsh)
-          current_obj[key_str]= ConfigObject.new
-          current_obj= current_obj[key_str]
+          current_obj[key_str]= {} #ConfigObject.new
+          current_obj= current_obj[key_str] unless index == (path_elements.count-1)
 
         }
 
-        current_obj= JSON.parse File.read file_path
-        puts tmp_hsh
+        current_obj[ path_elements.last ]= JSON.parse File.read file_path
         Data.config_hash.deep_merge!(tmp_hsh)
 
+        return nil
       end
 
     end
