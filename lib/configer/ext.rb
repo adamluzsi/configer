@@ -8,6 +8,7 @@ module Configer
     end
 
     alias :__config__ :configer
+    alias :__CONFIG__ :configer
 
   end
 
