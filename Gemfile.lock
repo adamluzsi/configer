@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    configer (1.1.0)
+    configer (1.1.1)
       hashie
       loader
 
