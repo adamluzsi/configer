@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.name          = "configer"
   spec.version       = File.open(File.join(File.dirname(__FILE__),"VERSION")).read.split("\n")[0].chomp.gsub(' ','')
   spec.authors       = ["Adam Luzsi"]
-  spec.email         = ["adam.luzsi@ppt-consulting.net"]
+  spec.email         = ["adamluzsi@gmail.com"]
   spec.description   = %q{ Easy to use config module for apps. Use file system based paths for yaml files, to create sub keys }
   spec.summary       = %q{ super easy to use config module for general use }
 
