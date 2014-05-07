@@ -33,7 +33,7 @@ example for the mount options:
 
     require "configer"
 
-    asdf= Configer::ConfigObject.new( {hello: "world"} )
+    asdf= Configer.new( {hello: "world"} )
 
     Configer.mount_yaml out: asdf
     Configer.mount_json out: asdf

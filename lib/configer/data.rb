@@ -8,4 +8,14 @@ module Configer
     end
   end
 
+  class << self
+
+    def new *args
+      self::ConfigObject.new(*args)
+    end
+
+    alias :init :new
+
+  end
+
 end
