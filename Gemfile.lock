@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    configer (1.1.3)
+    configer (1.1.4)
       hashie
 
 GEM
