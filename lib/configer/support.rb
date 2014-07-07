@@ -103,9 +103,11 @@ module Configer
                    {}
                  end
 
-        object = {
-            ( path_parts.last.split('.')[-2] || path ) => object
-        }
+        if path.downcase.include?('meta')
+          object = {
+              ( path_parts.last.split('.')[-2] || path ) => object
+          }
+        end
 
         if category_key.nil?
           return_hash.deep_merge!(object)

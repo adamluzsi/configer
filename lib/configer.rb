@@ -1,6 +1,6 @@
-require 'hashie'
-require 'configer/data'
-require 'configer/sup'
+
+require 'configer/object'
+require 'configer/support'
 
 require 'configer/json'
 require 'configer/yaml'
