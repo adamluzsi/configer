@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.version       = File.open(File.join(File.dirname(__FILE__),"VERSION")).read.split("\n")[0].chomp.gsub(' ','')
   spec.authors       = ["Adam Luzsi"]
   spec.email         = ["adamluzsi@gmail.com"]
-  spec.description   = %q{ Easy to use config module for apps. Use file system based paths for yaml files, to create sub keys }
+  spec.description   = %q{ BrainDead Easy to use config module. Based on FileSystem logic, check gitHub for more info }
   spec.summary       = %q{ super easy to use config module for general use }
 
   spec.files         = `git ls-files`.split($/)
