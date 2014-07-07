@@ -21,6 +21,9 @@ module Configer
     #> return mounted config objects
     def self.mount_config_and_lib_meta
 
+      return_hash = {}
+      return_hash.__send__ :extend, HashExtension
+
       config_yaml_paths= []
       config_yaml_paths.instance_eval do
         def push_path(*paths)
@@ -64,9 +67,6 @@ module Configer
         config_yaml_paths.push_paths *Dir.glob(File.join(Dir.pwd,'lib','{meta,META}','**','*.{yaml,yml,json}'))
         config_yaml_paths.compact!
       end
-
-      return_hash = {}
-      return_hash.__send__ :extend, HashExtension
 
       config_yaml_paths.each do |path|
 
@@ -115,11 +115,12 @@ module Configer
           return_hash.deep_merge!(category_key => object)
         end
 
-        return return_hash
-
       end
 
+      return return_hash
 
     end
+
+
   end
 end

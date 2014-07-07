@@ -3,12 +3,9 @@ module Configer
 
   module ObjectEXT
 
-    def configer
+    def __config__
       ::Configer::Data.config_hash
-    end
-
-    alias :__config__ :configer
-    alias :__CONFIG__ :configer
+    end;alias __CONFIG__ __config__
 
   end
 

@@ -19,7 +19,7 @@ super easy to use configuration module for ruby apps
     Configer.mount_json
 
     # this will merge new objects by default to the __config__ object (or configer)
-    puts __config__ #> you can use configer alias as well
+    puts __config__ #> you can use __CONFIG__ alias as well
 
     # for example we can call the dir.pwd folder's sample/meta/test.yml file parsed data as
     puts __config__.sample.meta.test #> { hello: "world" }
