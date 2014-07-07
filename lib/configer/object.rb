@@ -5,21 +5,38 @@ module Configer
       self.__send__ :protected, sym
     end
 
-    def method_missing name,*args
+    def method_missing( method_name, *args )
 
-      if name.to_s[-1] == '='
-        self[name.to_s[0..-2]]= *args
+      if method_name.to_s[-1] == '='
+        self[method_name.to_s[0..-2]]= *args
+        return self[method_name.to_s[0..-2]]
       else
-        self[name.to_s]
+
+        if self[method_name.to_s].nil? && self.respond_to?(method_name)
+          return self.__send__(method_name)
+        else
+          return self[method_name.to_s]
+        end
+
       end
 
     end
 
-    public(:__send__) if $TEST
-    public :to_s,:inspect,:delete,:delete_if,:merge!,:merge,
-           :each,:each_pair,:map,:reduce,:group_by,
-           :keys,:values,:select,:to_a,:grep,:count,:size,
-           :==,:===,:include?,:class,:dup,:freeze
+    public :__send__,:respond_to?
+
+    #> allowed Hash methods
+    public :to_s,:inspect,:delete,:delete_if,
+           :merge!,:merge,:keys,:values,:freeze
+
+    #> allowed Enumerable methods
+    public :each,:each_pair,:map,:reduce,:group_by,
+           :select,:to_a,:grep,:count,:size
+
+    #> allowed object methods
+    public :class,:dup
+
+    #> allowed boolean methods
+    public :==,:===,:include?
 
     public
 
