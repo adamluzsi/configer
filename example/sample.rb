@@ -1,17 +1,8 @@
+require "configer"
 
-require 'hashie'
+asdf = {hello: "world"}
 
-%W[ data ].each do |name_tag|
-  require File.expand_path File.join File.dirname(__FILE__),'..','lib','configer',name_tag
-end
+Configer.mount_yaml out: asdf
+Configer.mount_json out: asdf
 
-var = Configer.new(
-    {
-        capacity: {
-            max: 9000
-        }
-    }
-)
-
-puts var
-# puts var.public_methods
+puts asdf

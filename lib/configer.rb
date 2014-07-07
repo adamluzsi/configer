@@ -1,4 +1,4 @@
-
+require 'configer/extension'
 require 'configer/object'
 require 'configer/support'
 

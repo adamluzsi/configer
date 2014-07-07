@@ -1,4 +1,5 @@
 module Configer
+
   class Object < ::Hash
 
     self.instance_methods.each do |sym|
@@ -65,6 +66,7 @@ module Configer
     end
 
   end
+
   module Data
     def self.config_hash
       return @@config ||= Object.parse(Support.mount_config_and_lib_meta)

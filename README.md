@@ -1,29 +1,61 @@
 configer
 ========
-
 super easy to use configuration module for ruby apps
+
+### install
+
+ $ gem install configer
 
 ### example
 
+#### Lazy Config object
+
+The configers default behavior is , when you put a yaml or a json file into the following directories
+* app_root/lib/meta/**/*
+* app_root/lib/meta/*
+* app_root/lib/custom_libary_name/meta/*
+* app_root/config/*
+* app_root/config/environments/*
+
+The meta tag can be aliased with META
+
+The logic is the following:
+* in the lib/meta/*
+    * will be merged into the __config__ hash object under the key of the file name 
+* in the lib/meta/folder/*
+    * will be merged into the __config__ object with the folder as main key and under that file name as key for the content
+* in the lib/folder/meta/*
+    * will be merged into the __config__ object with the folder as main key, and the file names as sub keys followed by the content
+* in the config/* && config/environments/*
+    * will be merged into the __config__ object as is. Deep merge will used so already existing keys will only be override partially
+    * the following is the order if yaml/json files names as enviornments
+        * default
+        * development
+        * test
+        * production
+
+I personally say, put everything into the lib/gem_name/meta/* so you can have auto separated configs for each gem/module
+The __config__ object will not be generated util it's being called.
+
+#### Loading up Yaml and Json files from the application directory
+
+You can mount JSON and yaml files with manually.
+This will make key paths based on FileSystem logic
+
 ```ruby
 
-    require_relative "../lib/configer.rb"
+    require "configer"
 
-    #>  you can use root/r/folder key,
-    #   for set home directory
+    #> optons:
     #
-    #>  you can point to an object if you want change the default __config__ obj
-    #   keys: o/out/to
+    # root/r/folder/dir/directory 
+    #   - set the folder where the mount will begin
     #
-    Configer.mount_yaml
-    Configer.mount_json
-
-    # this will merge new objects by default to the __config__ object (or configer)
-    puts __config__ #> you can use __CONFIG__ alias as well
-
-    # for example we can call the dir.pwd folder's sample/meta/test.yml file parsed data as
-    puts __config__.sample.meta.test #> { hello: "world" }
-    puts __config__.sample.meta.test.hello #> "world"
+    # to/out/o
+    #   - point to a hashlike object where you want the config objects to be merged
+    #
+    Configer.mount_yaml #> return Configer::Object that contain parsed yaml
+    Configer.mount_json #> return Configer::Object that contain parsed json
 
 ```
 
@@ -33,19 +65,11 @@ example for the mount options:
 
     require "configer"
 
-    asdf= Configer.new( {hello: "world"} )
+    asdf = {hello: "world"} 
 
     Configer.mount_yaml out: asdf
     Configer.mount_json out: asdf
 
-    puts __config__
-    #<Configer::ConfigObject>
-
     puts asdf
-    #<Configer::ConfigObject    hello="world"
-    #                           sample=#<Configer::ConfigObject meta=#<Configer::ConfigObject
-    #                                                           hello=#<Configer::ConfigObject hello="world">
-    #                                                           test=#<Configer::ConfigObject hello="world">>>>
-
 
 ```

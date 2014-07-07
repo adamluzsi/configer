@@ -1,21 +1,5 @@
 module Configer
 
-  module HashExtension
-
-    def deep_merge(other_hash)
-      self.dup.deep_merge!(other_hash)
-    end
-
-    def deep_merge!(other_hash)
-      other_hash.each_pair do |k,v|
-        tv = self[k]
-        self[k] = tv.is_a?(::Hash) && v.is_a?(::Hash) ? tv.deep_merge(v) : v
-      end
-      self
-    end
-
-  end
-
   module Support
 
     #> return mounted config objects
@@ -50,6 +34,13 @@ module Configer
         end;alias push_paths push_path
       end
 
+      #> load lib meta folders files
+      if File.exist?(File.join(Dir.pwd,'lib'))
+        config_yaml_paths.push_paths *Dir.glob(File.join(Dir.pwd,'lib','**','{meta,META}','*.{yaml,yml,json}'))
+        config_yaml_paths.push_paths *Dir.glob(File.join(Dir.pwd,'lib','{meta,META}','**','*.{yaml,yml,json}'))
+        config_yaml_paths.compact!
+      end
+
       #> load config folder
       if File.exist?(File.join(Dir.pwd,'config'))
 
@@ -59,13 +50,6 @@ module Configer
         end
         config_yaml_paths.compact!
 
-      end
-
-      #> load lib meta folders files
-      if File.exist?(File.join(Dir.pwd,'lib'))
-        config_yaml_paths.push_paths *Dir.glob(File.join(Dir.pwd,'lib','**','{meta,META}','*.{yaml,yml,json}'))
-        config_yaml_paths.push_paths *Dir.glob(File.join(Dir.pwd,'lib','{meta,META}','**','*.{yaml,yml,json}'))
-        config_yaml_paths.compact!
       end
 
       config_yaml_paths.each do |path|
