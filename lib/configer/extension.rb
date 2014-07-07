@@ -3,17 +3,38 @@ module Configer
   module HashExtension
 
     def deep_merge(other_hash)
-      self.dup.deep_merge!(other_hash)
+
+      var = self.dup
+      var.__send__ :extend, HashExtension unless var.respond_to?(:deep_merge!)
+
+      return var.__send__ :deep_merge!, other_hash
+
     end
 
     def deep_merge!(other_hash)
+
       other_hash.each_pair do |k,v|
-        tv = self[k]
-        self[k] = tv.is_a?(::Hash) && v.is_a?(::Hash) ? tv.deep_merge(v) : v
+
+        self[k] = if self[k].class <= ::Hash && v.class <= ::Hash
+
+                    [self[k],v].each do |obj|
+                      obj.__send__ :extend, HashExtension unless obj.respond_to?(:deep_merge!)
+                    end
+
+                    self[k].deep_merge(v)
+
+                  else
+                    v
+                  end
+
       end
-      self
+
+      return self
+
     end
 
   end
+
+
 
 end
