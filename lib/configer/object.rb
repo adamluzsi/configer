@@ -23,7 +23,7 @@ module Configer
 
     end
 
-    public :__send__,:respond_to?
+    public :__send__,:public_send,:respond_to?
 
     #> allowed Hash methods
     public :to_s,:inspect,:delete,:delete_if,
