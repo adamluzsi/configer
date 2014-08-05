@@ -81,6 +81,7 @@ module Configer
     def self.config_hash
       return Object.parse(Support.mount_config_and_lib_meta)
     end
+
   end
 
   class << self
