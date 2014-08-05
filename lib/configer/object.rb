@@ -1,6 +1,6 @@
 module Configer
 
-  class Object < ::Hash
+  class Object < Hash
 
     self.instance_methods.each do |sym|
       self.__send__ :protected, sym
@@ -8,15 +8,18 @@ module Configer
 
     def method_missing( method_name, *args )
 
-      if method_name.to_s[-1] == '='
-        self[method_name.to_s[0..-2]]= *args
-        return self[method_name.to_s[0..-2]]
-      else
+      if method_name[-1] == '='
+        self[method_name[0..-2]]= *args
+        return self[method_name[0..-2]]
 
+      else
+        #> respond to method only if no value present
         if self[method_name.to_s].nil? && self.respond_to?(method_name)
           return self.__send__(method_name)
+
         else
           return self[method_name.to_s]
+
         end
 
       end
@@ -25,7 +28,7 @@ module Configer
 
     public :__send__,:public_send,:respond_to?
 
-    #> allowed Hash methods
+    #> some allowed Hash methods
     public :to_s,:inspect,:delete,:delete_if,
            :merge!,:merge,:keys,:values,:freeze
 
@@ -42,26 +45,30 @@ module Configer
     public
 
     def [] key
-      key = key.to_s
-      super
+      key = key.to_s if key.class <= Symbol
+      super || super(key.to_sym)
     end
 
     def []= key,value
-      key = key.to_s
+      key = key.to_s if key.class <= Symbol
       super
     end
 
     #> parse object
-    def self.parse obj
-      raise(ArgumentError,"input must be Hash") unless obj.is_a? ::Hash
+    def self.parse(obj)
 
-      hash = self.new.merge!(obj)
-      hash.each_pair do |key,value|
-        if value.class <= ::Hash
-          hash[key]= self.parse(value)
-        end
-      end
-      return hash
+      return case
+
+               when obj.class <= Hash
+                 obj.reduce(self.new){|m,h| m.merge!( (h[0].class <= Symbol ? h[0].to_s : h[0] ) => self.parse(h[1]) ) ;m}
+
+               when obj.class <= Array
+                 obj.map{|o| self.parse(o) }
+
+               else
+                 obj
+
+             end
 
     end
 
@@ -81,6 +88,10 @@ module Configer
 
     alias :init :new
 
+  end
+
+  def self.parse(obj)
+    Configer::Object.parse(obj)
   end
 
 end
