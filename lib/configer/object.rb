@@ -88,10 +88,10 @@ module Configer
 
     alias :init :new
 
-  end
+    def parse(obj)
+      self::Object.parse(obj)
+    end
 
-  def self.parse(obj)
-    Configer::Object.parse(obj)
   end
 
 end
