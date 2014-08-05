@@ -75,8 +75,11 @@ module Configer
   end
 
   module Data
+
+    #> i dont know why , but if i catch this ,
+    # than somethimes some object happens to not get parsed
     def self.config_hash
-      return @@config ||= Object.parse(Support.mount_config_and_lib_meta)
+      return Object.parse(Support.mount_config_and_lib_meta)
     end
   end
 
