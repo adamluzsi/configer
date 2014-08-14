@@ -10,7 +10,7 @@ module Configer
       [:r,:folder,:dir,:directory].each do |sym|
         opts[:root] ||= opts.delete(sym)
       end
-      opts[:root] ||=  Dir.pwd
+      opts[:root] ||=  Configer.pwd
 
       opts[:out]  ||= opts.delete(:o) || opts.delete(:to) || Configer::Object
       raise(ArgumentError,"out/to must point to hashlike object") unless opts[:out].class <= ::Hash

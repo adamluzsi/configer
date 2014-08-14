@@ -1,5 +1,15 @@
 module Configer
 
+  def self.pwd
+
+    if defined?(Rails) && !(Rails.root.nil?)
+      return Rails.root.to_s
+    else
+      return Dir.pwd.to_s
+    end
+
+  end
+
   module Support
 
     #> return mounted config objects
@@ -35,18 +45,18 @@ module Configer
       end
 
       #> load lib meta folders files
-      if File.exist?(File.join(Dir.pwd,'lib'))
-        config_yaml_paths.push_paths *Dir.glob(File.join(Dir.pwd,'lib','**','{meta,META}','*.{yaml,yml,json}'))
-        config_yaml_paths.push_paths *Dir.glob(File.join(Dir.pwd,'lib','{meta,META}','**','*.{yaml,yml,json}'))
+      if File.exist?(File.join(Configer.pwd,'lib'))
+        config_yaml_paths.push_paths *Dir.glob(File.join(Configer.pwd,'lib','**','{meta,META}','*.{yaml,yml,json}'))
+        config_yaml_paths.push_paths *Dir.glob(File.join(Configer.pwd,'lib','{meta,META}','**','*.{yaml,yml,json}'))
         config_yaml_paths.compact!
       end
 
       #> load config folder
-      if File.exist?(File.join(Dir.pwd,'config'))
+      if File.exist?(File.join(Configer.pwd,'config'))
 
-        config_yaml_paths.push_paths *Dir.glob(File.join(Dir.pwd,'config','*.{yaml,yml,json}'))
-        if File.exist?(File.join(Dir.pwd,'config','environments'))
-          config_yaml_paths.push_paths *Dir.glob(File.join(Dir.pwd,'config','environments','*.{yaml,yml,json}'))
+        config_yaml_paths.push_paths *Dir.glob(File.join(Configer.pwd,'config','*.{yaml,yml,json}'))
+        if File.exist?(File.join(Configer.pwd,'config','environments'))
+          config_yaml_paths.push_paths *Dir.glob(File.join(Configer.pwd,'config','environments','*.{yaml,yml,json}'))
         end
         config_yaml_paths.compact!
 
