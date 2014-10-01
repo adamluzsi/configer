@@ -37,7 +37,11 @@ module Configer
 
         }
 
-        current_obj[ path_elements.last ]= YAML.safe_load File.read file_path
+        method_to_call = YAML.respond_to?(:safe_load) ? :safe_load : :load
+        current_obj[ path_elements.last ]= YAML.public_send(
+            method_to_call,
+            File.read(file_path)
+        )
 
         opts[:out].deep_merge!(tmp_hsh)
 

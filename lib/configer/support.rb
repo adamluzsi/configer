@@ -89,7 +89,13 @@ module Configer
 
         object = if %W[ yaml yml ].include?(extension)
                    require 'yaml'
-                   YAML.safe_load(File.read(path))
+
+                   if YAML.respond_to?(:save_load)
+                     YAML.safe_load(File.read(path))
+                   else
+                     YAML.load(File.read(path))
+                   end
+
                  elsif extension == 'json'
                    require 'json'
                    JSON.parse(File.read(path))
