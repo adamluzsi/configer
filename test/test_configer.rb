@@ -1,6 +1,6 @@
 require_relative 'test_helper'
+describe 'configer' do
 
-describe 'Configer' do
 
 
 

@@ -1,4 +1,4 @@
-require "configer"
+require 'configer'
 
 puts __CONFIG__.public_send(:test)
 puts __CONFIG__.test.this.__send__ :class

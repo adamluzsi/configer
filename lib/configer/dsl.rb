@@ -1,4 +1,3 @@
-
 module Configer
 
   module ObjectEXT
