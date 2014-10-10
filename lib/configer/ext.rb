@@ -12,7 +12,7 @@ module Configer
         self[k] = if self[k].class <= ::Hash && v.class <= ::Hash
 
                     [self[k],v].each do |obj|
-                      obj.__send__ :extend, HashExtension unless obj.respond_to?(:deep_merge!)
+                      obj.__send__ :extend, HashExtension unless obj.respond_to?(:deep_merge)
                     end
 
                     self[k].deep_merge(v)

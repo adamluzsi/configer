@@ -3,7 +3,7 @@ module Configer
   module ObjectEXT
 
     def __config__
-      ::Configer::Data.config_object
+      ::Configer::Cache.config_hash
     end;alias __CONFIG__ __config__
 
   end

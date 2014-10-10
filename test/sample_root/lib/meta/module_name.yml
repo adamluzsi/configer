@@ -1,2 +1,2 @@
-some_conf:
-  yup: 'no'
+module_name_key:
+  module_name_value_hash_key: module_name_value_hash_value
