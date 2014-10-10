@@ -36,5 +36,4 @@ module Configer
   end
 
 
-
 end

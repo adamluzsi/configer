@@ -1,11 +1,11 @@
-require "configer"
+require 'configer'
 
 Configer.mount_yaml
 Configer.mount_json
 
-configer #> config
+__CONFIG__ #> config
 
 # for example we can call the root/sample/meta/test.yml file parsed data as
-puts configer.sample.meta.test #> { hello: world }
+puts __CONFIG__.sample.meta.test #> { hello: world }
 
 config_obj= {}

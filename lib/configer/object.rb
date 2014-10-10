@@ -2,65 +2,53 @@ module Configer
 
   class Object < Hash
 
+    include HashExtension
     self.instance_methods.each do |sym|
-      self.__send__ :protected, sym
+      protected sym
     end
 
-    def method_missing( method_name, *args )
+    public :__send__,:public_send,:[],:[]=
+    def method_missing( method_name, *args, &block )
 
-      if method_name[-1] == '='
+      obj_methods = self.__send__(:methods)
+      if method_name[-1] == '=' && !obj_methods.include?(method_name)
         self[method_name[0..-2]]= *args
         return self[method_name[0..-2]]
 
-      else
-        #> respond to method only if no value present
-        if self[method_name.to_s].nil? && self.respond_to?(method_name)
-          return self.__send__(method_name)
+      elsif self[method_name.to_s].nil? && obj_methods.include?(method_name)
 
+        if block_given?
+          return self.__send__(method_name,*args,&block)
         else
-          return self[method_name.to_s]
-
+          return self.__send__(method_name,*args)
         end
+
+      else
+        return self[method_name.to_s]
 
       end
 
     end
 
-    public :__send__,:public_send,:respond_to?
-
-    #> some allowed Hash methods
-    public :to_s,:inspect,:delete,:delete_if,
-           :merge!,:merge,:keys,:values,:freeze
-
-    #> allowed Enumerable methods
-    public :each,:each_pair,:map,:reduce,:group_by,
-           :select,:to_a,:grep,:count,:size
-
-    #> allowed object methods
-    public :class,:dup
-
-    #> allowed boolean methods
-    public :==,:===,:include?
-
     public
 
-    def [] key
+    def [](key)
       key = key.to_s if key.class <= Symbol
       super || super(key.to_sym)
     end
 
-    def []= key,value
+    def []=(key,value)
       key = key.to_s if key.class <= Symbol
       super
     end
 
     #> parse object
     def self.parse(obj)
-
       return case
 
                when obj.class <= Hash
-                 obj.reduce(self.new){|m,h| m.merge!( (h[0].class <= Symbol ? h[0].to_s : h[0] ) => self.parse(h[1]) ) ;m}
+                 obj.reduce(self.new){|m,h|
+                   m.merge!( (h[0].class <= Symbol ? h[0].to_s : h[0] ) => self.parse(h[1]) ) ;m}
 
                when obj.class <= Array
                  obj.map{|o| self.parse(o) }
@@ -76,8 +64,7 @@ module Configer
 
   module Data
 
-    #> i dont know why , but if i catch this ,
-    # than somethimes some object happens to not get parsed
+    #TODO: implement some dynamic lazy load magic
     def self.config_hash
       return Object.parse(Support.mount_config_and_lib_meta)
     end
@@ -86,7 +73,7 @@ module Configer
 
   class << self
 
-    def new *args
+    def new(*args)
       self::Object.new(*args)
     end
 
