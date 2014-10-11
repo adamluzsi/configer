@@ -1,5 +1,4 @@
 module Configer
-
   class << self
 
     def mount_all
@@ -14,7 +13,6 @@ module Configer
       ].reduce(Object.new){|m,o| m.deep_merge!(o) rescue nil ;m}
     end
 
+
   end
-
-
 end

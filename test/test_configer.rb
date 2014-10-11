@@ -7,6 +7,4 @@ describe 'configer' do
 
   end
 
-
-
 end

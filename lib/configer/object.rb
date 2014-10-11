@@ -62,15 +62,6 @@ module Configer
 
   end
 
-  module Data
-
-    #TODO: implement some dynamic lazy load magic
-    def self.config_hash
-      return Object.parse(Support.mount_config_and_lib_meta)
-    end
-
-  end
-
   class << self
 
     def new(*args)
