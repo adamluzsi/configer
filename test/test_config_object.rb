@@ -26,6 +26,11 @@ describe 'configer' do
     __config__.module_name.module_name_key.hello.must_be_instance_of Float
     __config__.sub_key.must_be_instance_of Float
 
+    __config__.test.erb_sample.must_be_instance_of Float
+    __config__.dunno.yep.hy.must_be_instance_of Float
+
+    __config__.sample.sub_key_folder.test.sample.must_be_instance_of Float
+
     #> config/env
     if Configer.env == 'development'
       __config__.development_key.must_be :==, 'yep'
