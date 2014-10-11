@@ -2,6 +2,10 @@ module Configer
 
   module Helpers
 
+    def supported_formats
+      @formats ||= %W[ erb json yaml yml ]
+    end
+
     def parser(file_path)
 
       file_string = if file_path.downcase =~ /\.erb\.?/
@@ -100,7 +104,7 @@ module Configer
               '{lib,libs}',
               '{meta,META}',
               '**',
-              '*.{yml,yaml,json}'
+              "*.{#{supported_formats.join(',')}}"
           )
       )
 
@@ -116,7 +120,7 @@ module Configer
                   '*',
                   '{meta,META}',
                   '**',
-                  '*.{yml,yaml,json}'
+                  "*.{#{supported_formats.join(',')}}"
               )
           )
       )
@@ -132,7 +136,7 @@ module Configer
               File.join(
                   Configer.pwd,
                   'config',
-                  '*.{yml,yaml,json}'
+                  "*.{#{supported_formats.join(',')}}"
               )
           ),
           break_if: -> e { e.size == 1 },
@@ -151,7 +155,7 @@ module Configer
                   Configer.pwd,
                   'config',
                   '{environments,environment,env,envs}',
-                  "#{Configer.env}.{yml,yaml,json}"
+                  "#{Configer.env}.{#{supported_formats.join(',')}}"
               )
           ),
           break_if: -> { elements.size >= 1 },

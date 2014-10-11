@@ -1,4 +1,4 @@
 default_key: default_value
 module_name:
   module_name_key:
-    hello: world!
+    hello: <%= Random.rand %>
