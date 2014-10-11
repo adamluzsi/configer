@@ -15,15 +15,16 @@ module Configer
                       file_string = File.read(file_path)
                     end
 
-      object = if file_path =~ /\.ya?ml$/
+      object = if file_path =~ /\.ya?ml(\.erb)?$/
                  require 'yaml'
+                 #> back compatibility for old yaml parse logic
                  if YAML.respond_to?(:save_load)
                    YAML.safe_load(file_string)
                  else
                    YAML.load(file_string)
                  end
 
-               elsif file_path =~ /\.json$/
+               elsif file_path =~ /\.json(\.erb)?$/
                  require 'json'
                  JSON.parse(file_string)
 
@@ -32,17 +33,10 @@ module Configer
 
                end
 
-      case object
 
-        when Hash
-          return Object.parse(object)
+      return Object.parse(object)
 
-        else
-          return Object.parse({ 'data' => object })
-
-      end
-
-    rescue;{}
+    rescue;nil
     end
 
     def name_parser(name_str)
@@ -60,8 +54,10 @@ module Configer
       return paths.reduce(Object.new) do |m,file_path|
 
         if namespace_less
-          m.deep_merge!(parser(file_path))
+          #> if some non matching type wanted to be merged
+          m.deep_merge!(parser(file_path)) rescue nil
         else
+
           #> keys will be downcase anyways
           elements = []
           file_path.split(File::Separator).reverse.each do |element|
@@ -91,6 +87,7 @@ module Configer
 
               end
           )
+
         end;m
 
       end
@@ -98,13 +95,15 @@ module Configer
 
     def mount_lib_meta
 
-      mount_process *Dir.glob(
-          File.join(
-              Configer.pwd,
-              '{lib,libs}',
-              '{meta,META}',
-              '**',
-              "*.{#{supported_formats.join(',')}}"
+      mount_process(
+          *Dir.glob(
+              File.join(
+                  Configer.pwd,
+                  '{lib,libs}',
+                  '{meta,META}',
+                  '**',
+                  "*.{#{supported_formats.join(',')}}"
+              )
           )
       )
 
@@ -124,14 +123,11 @@ module Configer
               )
           )
       )
-
-
     end
 
     def mount_config
 
       mount_process(
-
           *Dir.glob(
               File.join(
                   Configer.pwd,
@@ -141,7 +137,6 @@ module Configer
           ),
           break_if: -> e { e.size == 1 },
           namespace_less: true
-
       )
 
     end
@@ -149,7 +144,6 @@ module Configer
     def mount_config_environments
 
       mount_process(
-
           *Dir.glob(
               File.join(
                   Configer.pwd,
@@ -158,9 +152,8 @@ module Configer
                   "#{Configer.env}.{#{supported_formats.join(',')}}"
               )
           ),
-          break_if: -> { elements.size >= 1 },
+          break_if: -> e { e.size >= 1 },
           namespace_less: true
-
       )
 
     end

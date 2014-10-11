@@ -44,19 +44,19 @@ module Configer
 
     #> parse object
     def self.parse(obj)
-      return case
+      case obj
 
-               when obj.class <= Hash
-                 obj.reduce(self.new){|m,h|
-                   m.merge!( (h[0].class <= Symbol ? h[0].to_s : h[0] ) => self.parse(h[1]) ) ;m}
+        when Hash
+          obj.reduce(self.new){|m,h|
+            m.deep_merge!( (h[0].class <= Symbol ? h[0].to_s : h[0] ) => self.parse(h[1]) ) ;m}
 
-               when obj.class <= Array
-                 obj.map{|o| self.parse(o) }
+        when Array
+          obj.map{|o| self.parse(o) }
 
-               else
-                 obj
+        else
+          obj
 
-             end
+      end
 
     end
 
