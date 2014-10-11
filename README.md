@@ -7,70 +7,65 @@ super easy to use configuration module for ruby apps.
 
  $ gem install configer
 
-### example
+### Description
+
+Configer is a support gem, to give the developer ability,
+creating meta config files, that should be loaded into the application.
+
+Configer follow the traditional ways in this field, and use the following Filesystem logic:
+
+mounting configuration files as they are
+
+ ./project_dir/config/*
+
+mounting environment configuration file as they are based on the current envernioment stage (development,test,production,staging)
+* envirnomens folder name can be also envs/env/environment
+
+ ./project_dir/config/environments/*
+
+mounting configuration files from lib/meta folder.
+* Each config file name will be a "key" in the main config object
+  * same goes with the folders in the meta file
+  * the serialized object will be the value
+
+ ./project_dir/lib/meta/**/*
+
+mounting configuration files from lib/module_name/meta folder.
+* Each config file name will be a "key" in the config object that is located under the module_name key in the main config object
+  * same goes with the folders in the meta file
+  * the serialized object will be the value
+
+ ./project_dir/lib/module_name/meta/**/*
+
+
+The meta folder name can be aliased with META
+
+#### example
+
+in the /test/sample_root you can see an example
 
 #### Lazy Config object
 
-The configers default behavior is , when you put a yaml or a json file into the following directories
-* app_root/lib/meta/**/*
-* app_root/lib/meta/*
-* app_root/lib/custom_libary_name/meta/*
-* app_root/config/*
-* app_root/config/environments/*
-
-The meta tag can be aliased with META
-
-The logic is the following:
-* in the lib/meta/*
-    * will be merged into the __config__ hash object under the key of the file name 
-* in the lib/meta/folder/*
-    * will be merged into the __config__ object with the folder as main key and under that file name as key for the content
-* in the lib/folder/meta/*
-    * will be merged into the __config__ object with the folder as main key, and the file names as sub keys followed by the content
-* in the config/* && config/environments/*
-    * will be merged into the __config__ object as is. Deep merge will used so already existing keys will only be override partially
-    * the following is the order if yaml/json files names as enviornments
-        * default
-        * development
-        * test
-        * production
-
-I personally say, put everything into the lib/gem_name/meta/* so you can have auto separated configs for each gem/module
 The __config__ object will not be generated util it's being called.
 
-#### Loading up Yaml and Json files from the application directory
+#### Instance
 
-You can mount JSON and yaml files with manually.
-This will make key paths based on FileSystem logic
+config object can be made into simple instance, based on argument passed folder path
 
-```ruby
+#### ERB support
 
-    require "configer"
+config files support ERB parsing if the file contain .erb extension in the name
 
-    #> optons:
-    #
-    # root/r/folder/dir/directory 
-    #   - set the folder where the mount will begin
-    #
-    # to/out/o
-    #   - point to a hashlike object where you want the config objects to be merged
-    #
-    Configer.mount_yaml #> return Configer::Object that contain parsed yaml
-    Configer.mount_json #> return Configer::Object that contain parsed json
+#### Supported Serializations
 
-```
+the current supported parsing logic are Yaml and JSON, that could be mixed with ERB
 
-example for the mount options:
+### example
 
-```ruby
+__config__.grape.defaults #> return the config object that is located under {"grape"=>{"defaults"=>{...}}}
 
-    require "configer"
+### after words
 
-    asdf = {hello: "world"} 
+I personally say, put everything into the lib/gem_name/meta/**/* so you can have auto separated configs for each gem/module
 
-    Configer.mount_yaml out: asdf
-    Configer.mount_json out: asdf
 
-    puts asdf
-
-```
