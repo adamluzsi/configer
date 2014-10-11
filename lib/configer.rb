@@ -5,3 +5,5 @@ require 'configer/object'
 require 'configer/cache'
 require 'configer/mount'
 require 'configer/dsl'
+
+require 'configer/instance'

@@ -2,6 +2,10 @@ module Configer
 
   module Helpers
 
+    def get_pwd
+      Configer.pwd
+    end
+
     def supported_formats
       @formats ||= %W[ erb json yaml yml ]
     end
@@ -12,7 +16,7 @@ module Configer
                       require 'erb'
                       ERB.new(File.read(file_path)).result
                     else
-                      file_string = File.read(file_path)
+                      File.read(file_path)
                     end
 
       object = if file_path =~ /\.ya?ml(\.erb)?$/
@@ -98,7 +102,7 @@ module Configer
       mount_process(
           *Dir.glob(
               File.join(
-                  Configer.pwd,
+                  get_pwd,
                   '{lib,libs}',
                   '{meta,META}',
                   '**',
@@ -114,7 +118,7 @@ module Configer
       mount_process(
           *Dir.glob(
               File.join(
-                  Configer.pwd,
+                  get_pwd,
                   '{lib,libs}',
                   '*',
                   '{meta,META}',
@@ -130,7 +134,7 @@ module Configer
       mount_process(
           *Dir.glob(
               File.join(
-                  Configer.pwd,
+                  get_pwd,
                   'config',
                   "*.{#{supported_formats.join(',')}}"
               )
@@ -146,7 +150,7 @@ module Configer
       mount_process(
           *Dir.glob(
               File.join(
-                  Configer.pwd,
+                  get_pwd,
                   'config',
                   '{environments,environment,env,envs}',
                   "#{Configer.env}.{#{supported_formats.join(',')}}"

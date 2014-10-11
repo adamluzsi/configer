@@ -1,4 +1,8 @@
 require_relative 'test_helper'
+
+#> TEST dir root for fake the project root
+Dir.chdir(File.realpath(File.join(__dir__,'sample_root')))
+
 describe 'configer' do
 
   it 'should be able to fetch values with different access' do

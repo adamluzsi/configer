@@ -62,18 +62,4 @@ module Configer
 
   end
 
-  class << self
-
-    def new(*args)
-      self::Object.new(*args)
-    end
-
-    alias :init :new
-
-    def parse(obj)
-      self::Object.parse(obj)
-    end
-
-  end
-
 end
