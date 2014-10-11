@@ -2,10 +2,6 @@ module Configer
 
   module Helpers
 
-    def get_pwd
-      Configer.pwd
-    end
-
     def supported_formats
       @formats ||= %W[ erb json yaml yml ]
     end
@@ -97,7 +93,7 @@ module Configer
       end
     end
 
-    def mount_lib_meta
+    def mount_lib_meta(get_pwd=Configer.pwd)
 
       mount_process(
           *Dir.glob(
@@ -113,7 +109,7 @@ module Configer
 
     end
 
-    def mount_lib_module_meta
+    def mount_lib_module_meta(get_pwd=Configer.pwd)
 
       mount_process(
           *Dir.glob(
@@ -129,7 +125,7 @@ module Configer
       )
     end
 
-    def mount_config
+    def mount_config(get_pwd=Configer.pwd)
 
       mount_process(
           *Dir.glob(
@@ -145,7 +141,7 @@ module Configer
 
     end
 
-    def mount_config_environments
+    def mount_config_environments(get_pwd=Configer.pwd)
 
       mount_process(
           *Dir.glob(

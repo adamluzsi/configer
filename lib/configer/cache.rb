@@ -1,30 +1,20 @@
 module Configer
   module Cache
-
-    module Logic
-
-      def get_pwd
-        Configer.pwd
-      end
-
-      def mount_all
-        Configer.mount_all
-      end
+    class << self
 
       def object
-        @dir ||= get_pwd
-        if @dir == get_pwd
-          return @cache ||= Object.parse(mount_all)
+
+        @dir ||= Configer.pwd
+        if @dir == Configer.pwd
+          return @cache ||= Object.parse(Configer.mount_all)
         else
-          @dir = get_pwd
-          return @cache = Object.parse(mount_all)
+          @dir = Configer.pwd
+          return @cache = Object.parse(Configer.mount_all)
         end
 
       end
 
+
     end
-
-    extend Logic
-
   end
 end
