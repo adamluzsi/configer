@@ -5,9 +5,11 @@ module Configer
     def pwd
 
       if defined?(Rails) && !Rails.root.nil?
-        return Rails.root.to_s
+        Rails.root.to_s
+      elsif ENV['BUNDLE_GEMFILE']
+        ENV['BUNDLE_GEMFILE'].split(File::Separator)[0..-2].join(File::Separator)
       else
-        return Dir.pwd.to_s
+        Dir.pwd.to_s
       end
 
     end
